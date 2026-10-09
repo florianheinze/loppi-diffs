@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-import type { CreateTaskInput, Task } from '@demo/shared';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { filterTasks } from '@demo/shared';
+import type { CreateTaskInput, Task, TaskFilters } from '@demo/shared';
 import { api } from '../api/client';
 
-export function useTasks() {
+export function useTaskStore() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [filters, setFilters] = useState<TaskFilters>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,6 +16,8 @@ export function useTasks() {
       .catch((e: Error) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);
+
+  const visibleTasks = useMemo(() => filterTasks(tasks, filters), [tasks, filters]);
 
   const addTask = useCallback(async (input: CreateTaskInput) => {
     const created = await api.create(input);
@@ -30,5 +34,5 @@ export function useTasks() {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  return { tasks, loading, error, addTask, toggleDone, removeTask };
+  return { tasks, visibleTasks, filters, setFilters, loading, error, addTask, toggleDone, removeTask };
 }
