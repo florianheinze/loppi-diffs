@@ -19,8 +19,4 @@ export class TaskRepository {
   delete(id: string): boolean {
     return this.tasks.delete(id);
   }
-
-  clear(): void {
-    this.tasks.clear();
-  }
 }

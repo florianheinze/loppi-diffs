@@ -12,6 +12,12 @@ describe('api client', () => {
     expect(fetchFn.mock.calls[0][0]).toBe('/api/tasks');
   });
 
+  it('serialises filters into the query string', async () => {
+    const fetchFn = vi.fn().mockResolvedValue(jsonResponse([]));
+    await createApiClient(fetchFn).list({ priority: 'high', search: '' });
+    expect(fetchFn.mock.calls[0][0]).toBe('/api/tasks?priority=high');
+  });
+
   it('sends the body when creating', async () => {
     const fetchFn = vi.fn().mockResolvedValue(jsonResponse({ id: '1' }, 201));
     await createApiClient(fetchFn).create({ title: 'A' });
@@ -21,7 +27,7 @@ describe('api client', () => {
   });
 
   it('throws the server error message', async () => {
-    const fetchFn = vi.fn().mockResolvedValue(jsonResponse({ error: 'bad title' }, 400));
+    const fetchFn = vi.fn().mockResolvedValue(jsonResponse({ error: { code: 'VALIDATION_ERROR', message: 'bad title' } }, 400));
     await expect(createApiClient(fetchFn).create({ title: '' })).rejects.toThrow('bad title');
   });
 

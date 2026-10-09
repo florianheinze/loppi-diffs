@@ -1,0 +1,11 @@
+import { randomUUID } from 'node:crypto';
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export function generateId(): string {
+  return randomUUID();
+}
+
+export function isValidId(id: string): boolean {
+  return UUID_RE.test(id);
+}

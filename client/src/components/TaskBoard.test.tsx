@@ -7,6 +7,8 @@ const t = (id: string, status: Task['status']): Task => ({
   id,
   title: `Task ${id}`,
   status,
+  priority: 'medium',
+  tags: [],
   createdAt: '2025-01-01T00:00:00.000Z',
 });
 
@@ -20,7 +22,7 @@ describe('TaskBoard', () => {
       />,
     );
     expect(screen.getByRole('heading', { name: 'To do (2)' })).toBeTruthy();
-    expect(screen.getByRole('heading', { name: 'In progress (0)' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Doing (0)' })).toBeTruthy();
     const done = screen.getByRole('region', { name: 'Done' });
     expect(within(done).getByText('Task 3')).toBeTruthy();
   });

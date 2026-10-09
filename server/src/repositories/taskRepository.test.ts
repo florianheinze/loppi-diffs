@@ -6,6 +6,8 @@ const makeTask = (id: string): Task => ({
   id,
   title: `Task ${id}`,
   status: 'todo',
+  priority: 'medium',
+  tags: [],
   createdAt: '2025-01-01T00:00:00.000Z',
 });
 
@@ -37,9 +39,4 @@ describe('TaskRepository', () => {
     expect(repo.delete('a')).toBe(false);
   });
 
-  it('clears everything', () => {
-    repo.save(makeTask('a'));
-    repo.clear();
-    expect(repo.findAll()).toEqual([]);
-  });
 });

@@ -1,5 +1,5 @@
 import type { Task } from '@demo/shared';
-import { formatDate } from '../utils/formatDate';
+import { formatDueLabel } from '../utils/formatDate';
 import { Button } from './Button';
 
 interface Props {
@@ -11,10 +11,23 @@ interface Props {
 export function TaskItem({ task, onToggle, onDelete }: Props) {
   return (
     <li className={`task task--${task.status}`}>
-      <input type="checkbox" checked={task.status === 'done'} onChange={() => onToggle(task)} />
+      <input
+        type="checkbox"
+        aria-label={`Mark "${task.title}" as done`}
+        checked={task.status === 'done'}
+        onChange={() => onToggle(task)}
+      />
       <span className="task__title">{task.title}</span>
-      {task.dueDate && <time>{formatDate(task.dueDate)}</time>}
-      <Button onClick={() => onDelete(task.id)}>Delete</Button>
+      <span className={`badge badge--${task.priority}`}>{task.priority}</span>
+      {task.tags.map((tag) => (
+        <span key={tag} className="tag">
+          #{tag}
+        </span>
+      ))}
+      {task.dueDate && <time dateTime={task.dueDate}>{formatDueLabel(task.dueDate)}</time>}
+      <Button variant="danger" aria-label={`Delete "${task.title}"`} onClick={() => onDelete(task.id)}>
+        Delete
+      </Button>
     </li>
   );
 }

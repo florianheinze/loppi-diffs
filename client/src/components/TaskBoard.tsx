@@ -4,7 +4,7 @@ import type { Status, Task } from '@demo/shared';
 import { sortTasks } from '../utils/sortTasks';
 import { TaskList } from './TaskList';
 
-const labels: Record<Status, string> = { todo: 'To do', in_progress: 'In progress', done: 'Done' };
+const labels: Record<Status, string> = { todo: 'To do', doing: 'Doing', done: 'Done' };
 
 interface Props {
   tasks: Task[];
