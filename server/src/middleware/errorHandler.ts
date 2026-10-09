@@ -4,8 +4,8 @@ import { logger } from '../utils/logger';
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof AppError) {
-    return res.status(err.status).json({ error: err.message });
+    return res.status(err.status).json({ error: { code: err.code, message: err.message } });
   }
   logger.error('Unhandled error', err);
-  res.status(500).json({ error: 'Internal server error' });
+  res.status(500).json({ error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } });
 };
